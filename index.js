@@ -33,6 +33,12 @@ async function run() {
       const toDos = await toDoCollection.find().toArray();
       res.send(toDos);
     });
+    //Adding new task
+    app.post("/addTask", async (req, res) => {
+      const task = req.body;
+      const insertedTask = await toDoCollection.insertOne(task);
+      res.send(insertedTask);
+    });
   } finally {
   }
 }
