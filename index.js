@@ -21,10 +21,18 @@ const client = new MongoClient(uri, {
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
+
 async function run() {
   try {
     await client.connect();
+    const toDoCollection = client.db("to-do-list").collection("to-do-items");
     console.log("DB connected!");
+
+    //Displaying all to-dos
+    app.get("/todos", async (req, res) => {
+      const toDos = await toDoCollection.find().toArray();
+      res.send(toDos);
+    });
   } finally {
   }
 }
