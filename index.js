@@ -68,8 +68,16 @@ async function run() {
     app.post("/completedTasks", async (req, res) => {
       const task = req.body;
       console.log(task);
-      const insertedTask = await completedTaskCollection.insertOne(task);
-      res.send(insertedTask);
+      const doc = {
+        todoItem: task.todoItem,
+      };
+      const availableTask = await completedTaskCollection.find(doc).toArray();
+      if (availableTask.length !== 0) {
+        console.log("Item Already Exists", availableTask.length);
+      } else {
+        const insertedTask = await completedTaskCollection.insertOne(task);
+        res.send(insertedTask);
+      }
     });
     //Deleting Task from completed
     app.delete("/deleteFromCompleted/:id", async (req, res) => {
